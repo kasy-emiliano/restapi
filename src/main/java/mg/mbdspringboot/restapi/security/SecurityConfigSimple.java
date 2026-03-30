@@ -57,9 +57,13 @@ public class SecurityConfigSimple {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/voitures/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/agences/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/stats/**").permitAll()
+
+                        // utilisateur connecté
+                        .requestMatchers(HttpMethod.GET, "/api/agences/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/voitures/**").authenticated()
+
+                        // admin
+                        .requestMatchers(HttpMethod.GET, "/api/stats/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll());
 
